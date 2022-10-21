@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BDVentas" Class="ventasDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=BDVentas;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="BDVentasConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.TBoleta" Member="Boleta">
+    <Type Name="Boleta">
+      <Column Name="NroBoleta" Type="System.String" DbType="VarChar(6) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Fecha" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CodCliente" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="CodVendedor" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="Anulado" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="TBoleta_TDetalle" Member="Detalle" ThisKey="NroBoleta" OtherKey="NroBoleta" Type="Detalle" />
+      <Association Name="TVendedor_TBoleta" Member="Vendedor" ThisKey="CodVendedor" OtherKey="CodVendedor" Type="Vendedor" IsForeignKey="true" />
+      <Association Name="TCliente_TBoleta" Member="Cliente" ThisKey="CodCliente" OtherKey="CodCliente" Type="Cliente" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TVendedor" Member="Vendedor">
+    <Type Name="Vendedor">
+      <Column Name="CodVendedor" Type="System.String" DbType="VarChar(4) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Apellidos" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Nombres" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="TVendedor_TBoleta" Member="Boleta" ThisKey="CodVendedor" OtherKey="CodVendedor" Type="Boleta" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCategoria" Member="Categoria">
+    <Type Name="Categoria">
+      <Column Name="CodCategoria" Type="System.String" DbType="VarChar(4) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoriaPadre" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Association Name="TCategoria_TCategoria" Member="Categoria1" ThisKey="CodCategoria" OtherKey="CategoriaPadre" Type="Categoria" />
+      <Association Name="TCategoria_TProducto" Member="Producto" ThisKey="CodCategoria" OtherKey="CodCategoria" Type="Producto" />
+      <Association Name="TCategoria_TCategoria" Member="TCategoria1" ThisKey="CategoriaPadre" OtherKey="CodCategoria" Type="Categoria" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TCliente" Member="Cliente">
+    <Type Name="Cliente">
+      <Column Name="CodCliente" Type="System.String" DbType="VarChar(4) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Apellidos" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Nombres" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Direccion" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="TCliente_TBoleta" Member="Boleta" ThisKey="CodCliente" OtherKey="CodCliente" Type="Boleta" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TDetalle" Member="Detalle">
+    <Type Name="Detalle">
+      <Column Name="NroBoleta" Type="System.String" DbType="VarChar(6) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CodProducto" Type="System.String" DbType="VarChar(4) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Cantidad" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Column Name="PrecioUnitario" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Association Name="TBoleta_TDetalle" Member="Boleta" ThisKey="NroBoleta" OtherKey="NroBoleta" Type="Boleta" IsForeignKey="true" />
+      <Association Name="TProducto_TDetalle" Member="Producto" ThisKey="CodProducto" OtherKey="CodProducto" Type="Producto" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TProducto" Member="Producto">
+    <Type Name="Producto">
+      <Column Name="CodProducto" Type="System.String" DbType="VarChar(4) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UnidadMedida" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Precio" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Column Name="Stock" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CodCategoria" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Association Name="TProducto_TDetalle" Member="Detalle" ThisKey="CodProducto" OtherKey="CodProducto" Type="Detalle" />
+      <Association Name="TCategoria_TProducto" Member="Categoria" ThisKey="CodCategoria" OtherKey="CodCategoria" Type="Categoria" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
